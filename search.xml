@@ -69,4 +69,38 @@
         <tag>C语言程序设计</tag>
       </tags>
   </entry>
+  <entry>
+    <title>配置online vscode</title>
+    <url>/2022/03/20/online-vscode/</url>
+    <content><![CDATA[<p>前段时间购入了一台华为Matepad11，真的非常的香。但是对于经常写代码又不想随时背着笔记本电脑的软院学生而言，遗憾的是，平板上并没有好的代码编辑器。</p>
+<p>于是，在云服务器上部署一个online代码编辑器的想法诞生了。</p>
+<p>本人用的是大一上学期双十一期间购入的腾讯云轻量应用服务器，最近还免费升级到了4核4G，很赞。</p>
+<h3 id="利用docker安装online-vscode"><a href="#利用docker安装online-vscode" class="headerlink" title="利用docker安装online vscode"></a>利用docker安装online vscode</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker run -d --name=code-server \</span><br><span class="line">  -e PUID=1000 \</span><br><span class="line">  -e PGID=1000 \</span><br><span class="line">  -e TZ=Asia/Shanghai \</span><br><span class="line">  -e PASSWORD= \</span><br><span class="line">  -e SUDO_PASSWORD= \</span><br><span class="line">  -p 8080:8443 \</span><br><span class="line">  -v /path/to/appdata/config:/config \</span><br><span class="line">  -v /root/vscode:/vscode \</span><br><span class="line">  --restart unless-stopped \</span><br><span class="line">  lscr.io/linuxserver/code-server</span><br></pre></td></tr></table></figure>
+
+<h3 id="设置腾讯云防火墙"><a href="#设置腾讯云防火墙" class="headerlink" title="设置腾讯云防火墙"></a>设置腾讯云防火墙</h3><p>启动docker以后还是无法在<code>http:IP地址:8080</code>中访问online vscode, 原因是没有在云服务器的防火墙中添加新的规则，开放端口</p>
+<p><img src="/..%5Cimages%5Cimage-20220320212651339.png" alt="image-20220320212651339"></p>
+<p>现在再次访问<code>http:IP地址:8080</code>就可以跳转到登陆界面了，输入之前PASSWORD设置的密码就可以登陆了。</p>
+<p><img src="/..%5Cimages%5Cimage-20220320213047933.png" alt="image-20220320213047933"></p>
+<h3 id="安装Gcc、Python"><a href="#安装Gcc、Python" class="headerlink" title="安装Gcc、Python"></a>安装Gcc、Python</h3><p>然而，新建的docker里十分干净，连可怜的gcc都没有，于是开始安装。</p>
+<ol>
+<li><p>首先先进入docker</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it code-server /bin/bash</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>更新源，安装<code>wget</code>、<code>ping</code>、<code>ifconfig</code></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">apt-get update</span><br><span class="line">apt-get install wget</span><br><span class="line">apt-get install inetutils-ping</span><br><span class="line">apt-get install net-tools</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>安装gcc</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">apt-get install gcc </span><br></pre></td></tr></table></figure>
+</li>
+<li><p>安装python</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">apt-get install python3</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>之后我还顺便安装了<code>jdk</code>,主要就是敲敲指令，就不多赘述了。</p>
+<p>现在我得到了一个可以直接在网页访问的、好用的在线IDE了。</p>
+<p><img src="/..%5Cimages%5Cimage-20220320214141660.png" alt="image-20220320214141660"></p>
+]]></content>
+      <tags>
+        <tag>云服务器学习生活</tag>
+      </tags>
+  </entry>
 </search>
